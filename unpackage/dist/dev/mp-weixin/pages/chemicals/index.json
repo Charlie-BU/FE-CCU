@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "药品",
+  "navigationBarBackgroundColor": "#1ABFC0",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "u-icon": "../../uni_modules/vk-uview-ui/components/u-icon/u-icon",
+    "u-tabs": "../../uni_modules/vk-uview-ui/components/u-tabs/u-tabs",
+    "u-search": "../../uni_modules/vk-uview-ui/components/u-search/u-search"
+  }
+}

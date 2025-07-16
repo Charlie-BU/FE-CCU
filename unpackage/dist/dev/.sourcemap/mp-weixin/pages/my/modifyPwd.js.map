@@ -1,0 +1,1 @@
+{"version":3,"file":"modifyPwd.js","sources":["pages/my/modifyPwd.vue?type=page"],"sourcesContent":["import MiniProgramPage from '/Users/mac/Desktop/Programming/CCU/FE-CCU/pages/my/modifyPwd.vue'\nwx.createPage(MiniProgramPage)"],"names":["MiniProgramPage"],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,GAAG,WAAWA,SAAe;"}
