@@ -6,6 +6,7 @@
     "pages/chemicals/index",
     "pages/chemicals/detail",
     "pages/chemicals/add-or-modify",
+    "pages/chemicals/chemical-use-logs",
     "pages/index/release-notice",
     "pages/user-list/index",
     "pages/user-list/unchecked-users",

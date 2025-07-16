@@ -12,9 +12,12 @@
                 <div class="userDate flex">
                     <button class="btn-outline-sm" @click="logout">退出登录</button>
                     <div class="left">
-                        <img v-if="user.avatarUrl" class="user" style="border-radius: 50%" :src="user.avatarUrl" alt="" />
-                        <img v-else-if="user.gender == 1" class="user" style="border-radius: 50%" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/male.png" alt="" />
-                        <img v-else-if="user.gender == 2" class="user" style="border-radius: 50%" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/female.png" alt="" />
+                        <img v-if="user.avatarUrl" class="user" style="border-radius: 50%" :src="user.avatarUrl"
+                            alt="" />
+                        <img v-else-if="user.gender == 1" class="user" style="border-radius: 50%"
+                            src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/male.png" alt="" />
+                        <img v-else-if="user.gender == 2" class="user" style="border-radius: 50%"
+                            src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/female.png" alt="" />
                     </div>
                     <div class="right">
                         <div class="nike">{{ user.username }} - {{ user.directionName }}</div>
@@ -47,12 +50,16 @@
                         <div class="top">
                             <div class="tip"></div>
                             <div class="myPm">负责设备</div>
-                            <u-icon class="fr" style="position: relative; top: 5rpx" name="arrow-right" color="#212121" size="28" />
+                            <u-icon class="fr" style="position: relative; top: 5rpx" name="arrow-right" color="#212121"
+                                size="28" />
                             <div class="tp flex">
                                 <div class="LEFT">
-                                    <img class="LEFTiCON round" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/equipment.jpg" alt="" mode="aspectFill" />
+                                    <img class="LEFTiCON round"
+                                        src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/equipment.jpg" alt=""
+                                        mode="aspectFill" />
                                 </div>
-                                <div v-if="takingEquipmentInfo[0] === 0" class="righttP" style="font-weight: 600; margin-top: 20rpx; color: red">暂无负责设备</div>
+                                <div v-if="takingEquipmentInfo[0] === 0" class="righttP"
+                                    style="font-weight: 600; margin-top: 20rpx; color: red">暂无负责设备</div>
                                 <div v-else class="righttP" style="font-weight: 600">
                                     {{ takingEquipmentInfo[1] }} 等
                                     <div style="color: red">{{ takingEquipmentInfo[0] }} 件</div>
@@ -64,12 +71,16 @@
                         <div class="top">
                             <div class="tip"></div>
                             <div class="myPm">领用药品</div>
-                            <u-icon class="fr" style="position: relative; top: 5rpx" name="arrow-right" color="#212121" size="28" />
+                            <u-icon class="fr" style="position: relative; top: 5rpx" name="arrow-right" color="#212121"
+                                size="28" />
                             <div class="tp flex">
                                 <div class="LEFT">
-                                    <img class="LEFTiCON round" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/chemical.jpg" alt="" mode="aspectFill" />
+                                    <img class="LEFTiCON round"
+                                        src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/chemical.jpg" alt=""
+                                        mode="aspectFill" />
                                 </div>
-                                <div v-if="takingChemicalInfo[0] === 0" class="righttP" style="font-weight: 600; margin-top: 20rpx; color: red">暂无领用药品</div>
+                                <div v-if="takingChemicalInfo[0] === 0" class="righttP"
+                                    style="font-weight: 600; margin-top: 20rpx; color: red">暂无领用药品</div>
                                 <div v-else class="righttP" style="font-weight: 600">
                                     {{ takingChemicalInfo[1] }} 等
                                     <div style="color: red">{{ takingChemicalInfo[0] }} 件</div>
@@ -96,20 +107,13 @@
                             <div class="span">修改密码</div>
                         </view>
                     </div>
-                    <div class="itemList" style="width: 25%; white-space: nowrap" @click="setPrivacy">
+                    <div v-if="user.usertype > 1" class="itemList" style="width: 25%; white-space: nowrap"
+                        @click="gotoChemicalUse">
                         <view>
-                            <view v-if="user.isPrivate">
-                                <p class="p">
-                                    <u-icon name="account" size="40" />
-                                </p>
-                                <div class="span">设为公开用户</div>
-                            </view>
-                            <view v-else>
-                                <p class="p">
-                                    <u-icon name="account-fill" size="40" />
-                                </p>
-                                <div class="span">设为私密用户</div>
-                            </view>
+                            <p class="p">
+                                <u-icon name="calendar-fill" size="40" />
+                            </p>
+                            <div class="span">药品使用情况</div>
                         </view>
                     </div>
                     <!-- <div v-if="user.usertype === 2 || user.usertype === 6" class="itemList" style="width: 25%; white-space: nowrap">
@@ -213,7 +217,8 @@
                     <button class="btn-outline-sm" style="left: 395rpx" @click="gotoLogin">登录</button>
                     <button v-if="show" class="btn-outline-sm" style="left: 570rpx" @click="gotoRegister">注册</button>
                     <div class="left">
-                        <img class="user" style="border-radius: 50%" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/unlogined.png" alt="" />
+                        <img class="user" style="border-radius: 50%"
+                            src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/unlogined.png" alt="" />
                     </div>
                     <div class="right">
                         <div class="nike">请登录</div>
@@ -330,8 +335,15 @@ const gotoModifyPwd = () => {
         url: "/pages/my/modifyPwd"
     });
 };
-const setPrivacy = () => {};
-const gotoManagement = () => {};
+
+const gotoChemicalUse = () => {
+    uni.navigateTo({
+        url: "/pages/chemicals/chemical-use-logs"
+    });
+};
+
+const setPrivacy = () => { };
+const gotoManagement = () => { };
 </script>
 
 <style lang="scss" scoped>
@@ -512,6 +524,7 @@ const gotoManagement = () => {};
 
         .left {
             width: 34%;
+
             .bcImg {
                 border-radius: 10%;
                 width: 100%;

@@ -9,6 +9,7 @@ if (!Math) {
   "./pages/chemicals/index.js";
   "./pages/chemicals/detail.js";
   "./pages/chemicals/add-or-modify.js";
+  "./pages/chemicals/chemical-use-logs.js";
   "./pages/index/release-notice.js";
   "./pages/user-list/index.js";
   "./pages/user-list/unchecked-users.js";

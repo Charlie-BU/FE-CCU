@@ -44,7 +44,7 @@ const _sfc_main = {
         });
         common_vendor.index.stopPullDownRefresh();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/index.vue:268", error);
+        common_vendor.index.__f__("error", "at pages/my/index.vue:273", error);
       }
     });
     const getSupervisorInfo = async () => {
@@ -101,7 +101,10 @@ const _sfc_main = {
         url: "/pages/my/modifyPwd"
       });
     };
-    const setPrivacy = () => {
+    const gotoChemicalUse = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/chemicals/chemical-use-logs"
+      });
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
@@ -162,43 +165,38 @@ const _sfc_main = {
           size: "40"
         }),
         F: common_vendor.o(gotoModifyPwd),
-        G: user.value.isPrivate
-      }, user.value.isPrivate ? {
+        G: user.value.usertype > 1
+      }, user.value.usertype > 1 ? {
         H: common_vendor.p({
-          name: "account",
+          name: "calendar-fill",
           size: "40"
-        })
-      } : {
-        I: common_vendor.p({
-          name: "account-fill",
-          size: "40"
-        })
-      }, {
-        J: common_vendor.o(setPrivacy),
-        K: common_vendor.t(user.value.username),
-        L: common_vendor.t(utils_js_conventions.getUserGender(user.value.gender)),
-        M: common_vendor.t(user.value.phone),
-        N: common_vendor.t(user.value.email),
-        O: common_vendor.t(utils_js_conventions.getUserRole(user.value.role)),
-        P: common_vendor.t(user.value.role === 1 ? "学号" : "工号"),
-        Q: common_vendor.t(user.value.workNum),
-        R: common_vendor.t(utils_js_conventions.getUserDegree(user.value.degree)),
-        S: common_vendor.t(user.value.directionName),
-        T: user.value.role === 1
-      }, user.value.role === 1 ? {
-        U: common_vendor.t(user.value.graduateTime)
+        }),
+        I: common_vendor.o(gotoChemicalUse)
       } : {}, {
-        V: common_vendor.p({
+        J: common_vendor.t(user.value.username),
+        K: common_vendor.t(utils_js_conventions.getUserGender(user.value.gender)),
+        L: common_vendor.t(user.value.phone),
+        M: common_vendor.t(user.value.email),
+        N: common_vendor.t(utils_js_conventions.getUserRole(user.value.role)),
+        O: common_vendor.t(user.value.role === 1 ? "学号" : "工号"),
+        P: common_vendor.t(user.value.workNum),
+        Q: common_vendor.t(utils_js_conventions.getUserDegree(user.value.degree)),
+        R: common_vendor.t(user.value.directionName),
+        S: user.value.role === 1
+      }, user.value.role === 1 ? {
+        T: common_vendor.t(user.value.graduateTime)
+      } : {}, {
+        U: common_vendor.p({
           stripe: true,
           emptyText: "无数据"
         })
       }) : common_vendor.e({
-        W: common_vendor.o(gotoLogin),
-        X: common_vendor.unref(show)
+        V: common_vendor.o(gotoLogin),
+        W: common_vendor.unref(show)
       }, common_vendor.unref(show) ? {
-        Y: common_vendor.o(gotoRegister)
+        X: common_vendor.o(gotoRegister)
       } : {}), {
-        Z: common_vendor.p({
+        Y: common_vendor.p({
           ["current-page"]: 4
         })
       });
