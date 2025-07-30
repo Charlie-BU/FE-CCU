@@ -33,19 +33,13 @@
             </div>
         </div>
 
-        <u-tabs
-            style="position: relative; bottom: 4rpx"
-            :list="categories"
-            bg-color="null"
-            active-color="#F25C07"
-            font-size="20rpx"
-            is-scroll="true"
-            :current="current"
-            @change="change"
-        ></u-tabs>
+        <u-tabs style="position: relative; bottom: 4rpx" :list="categories" bg-color="null" active-color="#F25C07"
+            font-size="20rpx" is-scroll="true" :current="current" @change="change"></u-tabs>
         <div style="display: flex">
-            <u-icon name="plus-circle-fill" color="#5853bf" size="50" style="margin-top: 5rpx" @click="gotoAddChemical" />
-            <u-search class="search_bar" v-model="searchContent" bg-color="#ffffff" :show-action="false" placeholder="输入药品名称或化学式"></u-search>
+            <u-icon name="plus-circle-fill" color="#5853bf" size="50" style="margin-top: 5rpx"
+                @click="gotoAddChemical" />
+            <u-search class="search_bar" v-model="searchContent" bg-color="#ffffff" :show-action="false"
+                placeholder="输入药品名称或化学式"></u-search>
             <button class="cu-btn btn round search-btn" @click="search">查找</button>
         </div>
         <scroll-view class="scroll" scroll-y="auto">
@@ -58,7 +52,8 @@
                 </div>
                 <div class="bc flex">
                     <div class="left">
-                        <img class="bcImg" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/chemical.jpg" alt="" />
+                        <img class="bcImg" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/chemical.jpg"
+                            alt="" />
                     </div>
                     <div class="right">
                         <div class="text1">{{ chemical.name }} - {{ chemical.formula }}</div>
@@ -70,7 +65,7 @@
 
                 <div class="mon">
                     药品状态：{{ conventions.getChemicalStatus(chemical.status) }}&nbsp;
-                    <span class="q">{{ utils.toPercentage(chemical.amount, (decimals = 0)) }}</span>
+                    <span class="q">{{ chemical.amount?.toFixed(1) }} 瓶</span>
                 </div>
                 <div style="text-align: right; margin-top: 20rpx">
                     <button class="cu-btn btn round bg-cyan" @click="gotoChemicalDetail(chemical.id)">药品详情</button>

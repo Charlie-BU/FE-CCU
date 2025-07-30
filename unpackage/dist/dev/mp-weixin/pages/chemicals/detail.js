@@ -19,9 +19,90 @@ const _sfc_main = {
     const chemicalId = common_vendor.ref(null);
     const chemical = common_vendor.ref({});
     const briefUserInfo = common_vendor.ref(null);
+    const selectedYear = common_vendor.ref("");
+    const selectedMonth = common_vendor.ref("");
+    const selectedYearIndex = common_vendor.ref(0);
+    const selectedMonthIndex = common_vendor.ref(0);
+    const yearOptions = common_vendor.ref([]);
+    const monthOptions = common_vendor.ref(["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]);
+    const filterResult = common_vendor.ref(null);
     common_vendor.onLoad((options) => {
       chemicalId.value = options.id;
     });
+    const initYearOptions = () => {
+      const currentYear = (/* @__PURE__ */ new Date()).getFullYear();
+      const years = [];
+      for (let i = currentYear; i >= currentYear - 10; i--) {
+        years.push(i + "年");
+      }
+      yearOptions.value = years;
+    };
+    const onYearChange = (e) => {
+      selectedYearIndex.value = e.detail.value;
+      selectedYear.value = yearOptions.value[e.detail.value];
+    };
+    const onMonthChange = (e) => {
+      selectedMonthIndex.value = e.detail.value;
+      selectedMonth.value = monthOptions.value[e.detail.value];
+    };
+    const filterChemicalRecords = async () => {
+      if (!selectedYear.value) {
+        common_vendor.index.showToast({
+          title: "请选择年份",
+          icon: "none",
+          duration: 1500
+        });
+        return;
+      }
+      common_vendor.index.showToast({
+        title: "筛选中",
+        icon: "loading",
+        duration: 1e5
+      });
+      const year = parseInt(selectedYear.value.replace("年", ""));
+      const month = selectedMonth.value ? parseInt(selectedMonth.value.replace("月", "")) : null;
+      const data = {
+        sessionid: common_vendor.index.getStorageSync("sessionid"),
+        chemicalId: chemicalId.value,
+        year,
+        month
+      };
+      try {
+        const res = await utils_js_api.uniRequest("POST", "chemical", "/getChemicalRecordsByTime", data);
+        common_vendor.index.hideToast();
+        if (res.status === 200) {
+          filterResult.value = {
+            inboundCount: res.inboundCount || 0,
+            outboundCount: res.outboundCount || 0
+          };
+          common_vendor.index.showToast({
+            title: "筛选完成",
+            icon: "success",
+            duration: 1500
+          });
+        } else {
+          common_vendor.index.showToast({
+            title: res.message || "筛选失败",
+            icon: "none",
+            duration: 1500
+          });
+        }
+      } catch (error) {
+        common_vendor.index.hideToast();
+        common_vendor.index.showToast({
+          title: "网络错误，请重试",
+          icon: "none",
+          duration: 1500
+        });
+      }
+    };
+    const resetFilter = () => {
+      selectedYear.value = "";
+      selectedMonth.value = "";
+      selectedYearIndex.value = 0;
+      selectedMonthIndex.value = 0;
+      filterResult.value = null;
+    };
     common_vendor.onMounted(async () => {
       common_vendor.index.showToast({
         title: "加载中",
@@ -33,6 +114,7 @@ const _sfc_main = {
       await getThisChemical();
       generateQRCode();
       await Promise.all([getRegistersInfo(), getResponsorInfo(), getTakersInfo()]);
+      initYearOptions();
       common_vendor.index.hideToast();
     });
     const getThisChemical = async () => {
@@ -62,7 +144,7 @@ const _sfc_main = {
           utils_js_utils.previewImage(tempFilePath);
         },
         fail: (err) => {
-          common_vendor.index.__f__("error", "at pages/chemicals/detail.vue:151", err);
+          common_vendor.index.__f__("error", "at pages/chemicals/detail.vue:297", err);
         }
       });
     };
@@ -104,7 +186,7 @@ const _sfc_main = {
       common_vendor.index.showModal({
         title: "领用药品",
         editable: true,
-        placeholderText: "请输入领用药品数量（填写1～100间数字，表示领用该药品数量百分比）",
+        placeholderText: "请输入领用药品瓶数（可填写小数）",
         success: async (r) => {
           if (r.confirm) {
             common_vendor.index.showToast({
@@ -113,9 +195,17 @@ const _sfc_main = {
               duration: 1e5
             });
             const amount = +r.content;
-            if (isNaN(amount) || !amount || amount <= 0 || amount > 100) {
+            if (isNaN(amount) || !amount || amount <= 0) {
               common_vendor.index.showToast({
-                title: "请输入1～100间数字，表示领用该药品数量百分比",
+                title: "请输入领用药品瓶数（可填写小数）",
+                icon: "none",
+                duration: 1e3
+              });
+              return;
+            }
+            if (amount > chemical.value.amount) {
+              common_vendor.index.showToast({
+                title: "领用药品瓶数不能大于库存",
                 icon: "none",
                 duration: 1e3
               });
@@ -178,7 +268,8 @@ const _sfc_main = {
     const supplementChemical = async () => {
       common_vendor.index.showModal({
         title: "补充药品",
-        content: "补充药品后，您将成为药品入库人。确定要补充药品？",
+        editable: true,
+        placeholderText: "请输入补充药品瓶数（可填写小数）",
         success: async (r) => {
           if (r.confirm) {
             common_vendor.index.showToast({
@@ -186,9 +277,19 @@ const _sfc_main = {
               icon: "loading",
               duration: 1e5
             });
+            const amount = +r.content;
+            if (isNaN(amount) || !amount || amount <= 0) {
+              common_vendor.index.showToast({
+                title: "请输入领用药品瓶数（可填写小数）",
+                icon: "none",
+                duration: 1e3
+              });
+              return;
+            }
             const data = {
               sessionid: common_vendor.index.getStorageSync("sessionid"),
-              chemicalId: chemicalId.value
+              chemicalId: chemicalId.value,
+              amount
             };
             const res = await utils_js_api.uniRequest("POST", "chemical", "/supplementChemical", data);
             common_vendor.index.showToast({
@@ -245,7 +346,7 @@ const _sfc_main = {
       });
     };
     return (_ctx, _cache) => {
-      var _a, _b;
+      var _a, _b, _c;
       return common_vendor.e({
         a: common_vendor.t(chemical.value.name),
         b: common_vendor.t(chemical.value.formula),
@@ -260,58 +361,97 @@ const _sfc_main = {
         j: common_vendor.t(utils_js_conventions.getChemicalDangerLevel(chemical.value.dangerLevel))
       } : {}, {
         k: common_vendor.t(utils_js_conventions.getChemicalStatus(chemical.value.status)),
-        l: common_vendor.t(utils_js_utils.toPercentage(chemical.value.amount, _ctx.decimals = 0)),
+        l: common_vendor.t((_a = chemical.value.amount) == null ? void 0 : _a.toFixed(1)),
         m: chemical.value.info
       }, chemical.value.info ? {} : {}, {
-        n: chemical.value.info
+        n: chemical.value.specification
+      }, chemical.value.specification ? {
+        o: common_vendor.t(chemical.value.specification)
+      } : {}, {
+        p: chemical.value.purity
+      }, chemical.value.purity ? {
+        q: common_vendor.t(chemical.value.purity)
+      } : {}, {
+        r: chemical.value.site
+      }, chemical.value.site ? {
+        s: common_vendor.t(chemical.value.site)
+      } : {}, {
+        t: chemical.value.info
+      }, chemical.value.info ? {} : {}, {
+        v: chemical.value.info
       }, chemical.value.info ? {
-        o: common_vendor.t(chemical.value.info)
+        w: common_vendor.t(chemical.value.info)
       } : {}, {
-        p: registers.value
+        x: registers.value
       }, registers.value ? {
-        q: common_vendor.t(registers.value.map(({
+        y: common_vendor.t(registers.value.map(({
           username
         }) => username).join("、") || "无")
       } : {}, {
-        r: responsor.value
+        z: responsor.value
       }, responsor.value ? {
-        s: common_vendor.t(responsor.value.username || "无")
+        A: common_vendor.t(responsor.value.username || "无")
       } : {}, {
-        t: takers.value
+        B: takers.value
       }, takers.value ? {
-        v: common_vendor.t(takers.value.map(({
+        C: common_vendor.t(takers.value.map(({
           username
         }) => username).join("、") || "无")
       } : {}, {
-        w: !((_a = chemical.value.takerIds) == null ? void 0 : _a.includes(briefUserInfo.value.id))
-      }, !((_b = chemical.value.takerIds) == null ? void 0 : _b.includes(briefUserInfo.value.id)) ? {
-        x: common_vendor.p({
+        D: common_vendor.t(selectedYear.value || "请选择年份"),
+        E: yearOptions.value,
+        F: selectedYearIndex.value,
+        G: common_vendor.o(onYearChange),
+        H: common_vendor.t(selectedMonth.value || "全年"),
+        I: monthOptions.value,
+        J: selectedMonthIndex.value,
+        K: common_vendor.o(onMonthChange),
+        L: common_vendor.p({
+          name: "search",
+          size: "16",
+          color: "#ffffff"
+        }),
+        M: common_vendor.o(filterChemicalRecords),
+        N: common_vendor.p({
+          name: "reload",
+          size: "16",
+          color: "#666666"
+        }),
+        O: common_vendor.o(resetFilter),
+        P: filterResult.value
+      }, filterResult.value ? {
+        Q: common_vendor.t(filterResult.value.inboundCount),
+        R: common_vendor.t(filterResult.value.outboundCount)
+      } : {}, {
+        S: !((_b = chemical.value.takerIds) == null ? void 0 : _b.includes(briefUserInfo.value.id))
+      }, !((_c = chemical.value.takerIds) == null ? void 0 : _c.includes(briefUserInfo.value.id)) ? {
+        T: common_vendor.p({
           name: "coupon-fill",
           size: "40"
         }),
-        y: common_vendor.o(takeChemical)
+        U: common_vendor.o(takeChemical)
       } : {
-        z: common_vendor.p({
+        V: common_vendor.p({
           name: "coupon",
           size: "40"
         }),
-        A: common_vendor.o(returnChemical)
+        W: common_vendor.o(returnChemical)
       }, {
-        B: common_vendor.p({
+        X: common_vendor.p({
           name: "plus-circle-fill",
           size: "40"
         }),
-        C: common_vendor.o(supplementChemical),
-        D: common_vendor.p({
+        Y: common_vendor.o(supplementChemical),
+        Z: common_vendor.p({
           name: "setting-fill",
           size: "40"
         }),
-        E: common_vendor.o(gotoModifyChemicalInfo),
-        F: common_vendor.p({
+        aa: common_vendor.o(gotoModifyChemicalInfo),
+        ab: common_vendor.p({
           name: "trash-fill",
           size: "40"
         }),
-        G: common_vendor.o(deleteChemical)
+        ac: common_vendor.o(deleteChemical)
       });
     };
   }

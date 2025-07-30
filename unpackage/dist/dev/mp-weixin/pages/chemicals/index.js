@@ -2,7 +2,6 @@
 const common_vendor = require("../../common/vendor.js");
 const utils_js_api = require("../../utils/js/api.js");
 const utils_js_loginCheck = require("../../utils/js/loginCheck.js");
-const utils_js_utils = require("../../utils/js/utils.js");
 const utils_js_conventions = require("../../utils/js/conventions.js");
 if (!Array) {
   const _easycom_u_icon2 = common_vendor.resolveComponent("u-icon");
@@ -55,7 +54,7 @@ const _sfc_main = {
         });
         common_vendor.index.stopPullDownRefresh();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/chemicals/index.vue:134", error);
+        common_vendor.index.__f__("error", "at pages/chemicals/index.vue:129", error);
       }
     });
     const allChemicalLength = common_vendor.ref(0);
@@ -191,6 +190,7 @@ const _sfc_main = {
         o: chemicals.value.length !== 0
       }, chemicals.value.length !== 0 ? {
         p: common_vendor.f(chemicals.value, (chemical, index, i0) => {
+          var _a;
           return common_vendor.e({
             a: common_vendor.t(index + 1),
             b: common_vendor.t(utils_js_conventions.getChemicalType(chemical.type)),
@@ -203,7 +203,7 @@ const _sfc_main = {
             h: common_vendor.t(chemical.info)
           } : {}, {
             i: common_vendor.t(utils_js_conventions.getChemicalStatus(chemical.status)),
-            j: common_vendor.t(utils_js_utils.toPercentage(chemical.amount, _ctx.decimals = 0)),
+            j: common_vendor.t((_a = chemical.amount) == null ? void 0 : _a.toFixed(1)),
             k: common_vendor.o(($event) => gotoChemicalDetail(chemical.id), index),
             l: index
           });

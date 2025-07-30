@@ -42,7 +42,10 @@ const _sfc_main = {
       dangerLevel: [],
       info: "",
       responsorId: null,
-      registerIds: []
+      registerIds: [],
+      specification: "",
+      purity: "",
+      site: ""
     });
     const dangerLevels = [
       { value: 1, label: "常规" },
@@ -73,6 +76,17 @@ const _sfc_main = {
         icon: "loading",
         duration: 1e5
       });
+      if (form.value.purity !== "" && form.value.purity !== null && form.value.purity !== void 0) {
+        const purityValue = parseFloat(form.value.purity);
+        if (isNaN(purityValue) || purityValue < 0 || purityValue > 1) {
+          common_vendor.index.showToast({
+            title: "纯度必须为0-1之间的数字或留空",
+            icon: "none",
+            duration: 1500
+          });
+          return;
+        }
+      }
       if (chemicalId.value) {
         const data2 = {
           sessionid: common_vendor.index.getStorageSync("sessionid"),
@@ -149,12 +163,18 @@ const _sfc_main = {
         k: chemicalId.value ? chemical.value.CAS : "请输入 CAS 号",
         l: form.value.CAS,
         m: common_vendor.o(($event) => form.value.CAS = $event.detail.value),
-        n: chemicalId.value && chemical.value.type === 1,
-        o: chemicalId.value && chemical.value.type === 2,
-        p: common_vendor.o(handleTypeChange),
-        q: chemicalId.value
+        n: chemicalId.value ? chemical.value.specification : "请输入规格",
+        o: form.value.specification,
+        p: common_vendor.o(($event) => form.value.specification = $event.detail.value),
+        q: chemicalId.value ? chemical.value.purity : "请输入纯度",
+        r: form.value.purity,
+        s: common_vendor.o(($event) => form.value.purity = $event.detail.value),
+        t: chemicalId.value && chemical.value.type === 1,
+        v: chemicalId.value && chemical.value.type === 2,
+        w: common_vendor.o(handleTypeChange),
+        x: chemicalId.value
       }, chemicalId.value ? {
-        r: common_vendor.f(dangerLevels, (item, index, i0) => {
+        y: common_vendor.f(dangerLevels, (item, index, i0) => {
           var _a, _b, _c, _d;
           return common_vendor.e({
             a: (_b = (_a = chemical.value) == null ? void 0 : _a.dangerLevel) == null ? void 0 : _b.includes(+item.value)
@@ -167,29 +187,32 @@ const _sfc_main = {
             e: index
           });
         }),
-        s: common_vendor.o(handleDangerLevelChange)
+        z: common_vendor.o(handleDangerLevelChange)
       } : {
-        t: common_vendor.f(dangerLevels, (item, index, i0) => {
+        A: common_vendor.f(dangerLevels, (item, index, i0) => {
           return {
             a: item.value,
             b: common_vendor.t(item.label),
             c: index
           };
         }),
-        v: common_vendor.o(handleDangerLevelChange)
+        B: common_vendor.o(handleDangerLevelChange)
       }, {
-        w: chemicalId.value ? chemical.value.info : "请输入备注（非必填）",
-        x: form.value.info,
-        y: common_vendor.o(($event) => form.value.info = $event.detail.value),
-        z: briefUserInfo.value && !chemicalId.value
+        C: chemicalId.value ? chemical.value.site : "请输入位置",
+        D: form.value.site,
+        E: common_vendor.o(($event) => form.value.site = $event.detail.value),
+        F: chemicalId.value ? chemical.value.info : "请输入备注（非必填）",
+        G: form.value.info,
+        H: common_vendor.o(($event) => form.value.info = $event.detail.value),
+        I: briefUserInfo.value && !chemicalId.value
       }, briefUserInfo.value && !chemicalId.value ? {
-        A: briefUserInfo.value.username
+        J: briefUserInfo.value.username
       } : {}, {
-        B: briefUserInfo.value && !chemicalId.value
+        K: briefUserInfo.value && !chemicalId.value
       }, briefUserInfo.value && !chemicalId.value ? {
-        C: briefUserInfo.value.username
+        L: briefUserInfo.value.username
       } : {}, {
-        D: common_vendor.o(submit)
+        M: common_vendor.o(submit)
       }) : {});
     };
   }

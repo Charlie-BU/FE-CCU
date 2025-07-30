@@ -34,8 +34,6 @@ export const getOpenidAndSessionKey = async () => {
 	return null;
 };
 
-
-
 // export function wxLogin() {
 // 	getOpenidAndSessionKey((openid) => {
 // 		if (openid) {

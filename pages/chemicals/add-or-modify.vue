@@ -9,33 +9,45 @@
 			<view class="kuang shadow">
 				<view class="hint">{{ chemicalId ? "药品信息修改" : "药品入库" }}</view>
 				<view class="form-group">
-					<image class="images" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/logo.jpg" mode="aspectFill" />
+					<image class="images" src="https://ccu-assets.oss-cn-beijing.aliyuncs.com/images/logo.jpg"
+						mode="aspectFill" />
 					<view class="inputSection">
 						<view class="title ipt">
 							<span style="color: red">*</span>
 							药品名称：
 						</view>
-						<input :placeholder="chemicalId ? chemical.name : '请输入药品名称'" maxlength="100" class="ipt tpyA" v-model="form.name" placeholder-class="phc ipt" />
+						<input :placeholder="chemicalId ? chemical.name : '请输入药品名称'" maxlength="100" class="ipt tpyA"
+							v-model="form.name" placeholder-class="phc ipt" />
 					</view>
 					<view class="inputSection">
 						<view class="title ipt">
 							<span style="color: red">*</span>
 							化学式 / 分子式：
 						</view>
-						<input
-							:placeholder="chemicalId ? chemical.formula : '请输入化学式或分子式'"
-							maxlength="100"
-							class="ipt tpyA"
-							v-model="form.formula"
-							placeholder-class="phc ipt"
-						/>
+						<input :placeholder="chemicalId ? chemical.formula : '请输入化学式或分子式'" maxlength="100"
+							class="ipt tpyA" v-model="form.formula" placeholder-class="phc ipt" />
 					</view>
 					<view class="inputSection">
 						<view class="title ipt">
 							<span style="color: red">*</span>
 							CAS：
 						</view>
-						<input :placeholder="chemicalId ? chemical.CAS : '请输入 CAS 号'" maxlength="100" class="ipt tpyA" v-model="form.CAS" placeholder-class="phc ipt" />
+						<input :placeholder="chemicalId ? chemical.CAS : '请输入 CAS 号'" maxlength="100" class="ipt tpyA"
+							v-model="form.CAS" placeholder-class="phc ipt" />
+					</view>
+					<view class="inputSection">
+						<view class="title ipt">
+							规格：
+						</view>
+						<input :placeholder="chemicalId ? chemical.specification : '请输入规格'" maxlength="100"
+							class="ipt tpyA" v-model="form.specification" placeholder-class="phc ipt" />
+					</view>
+					<view class="inputSection">
+						<view class="title ipt">
+							纯度：
+						</view>
+						<input :placeholder="chemicalId ? chemical.purity : '请输入纯度'" maxlength="100" class="ipt tpyA" 
+							v-model="form.purity" placeholder-class="phc ipt" />
 					</view>
 					<view class="inputSection">
 						<view class="title ipt">
@@ -44,11 +56,13 @@
 						</view>
 						<radio-group @change="handleTypeChange">
 							<label class="radio">
-								<radio value="1" color="#FFCC33" style="transform: scale(0.7)" :checked="chemicalId && chemical.type === 1" />
+								<radio value="1" color="#FFCC33" style="transform: scale(0.7)"
+									:checked="chemicalId && chemical.type === 1" />
 								无机
 							</label>
 							<label class="radio">
-								<radio value="2" color="#FFCC33" style="transform: scale(0.7)" :checked="chemicalId && chemical.type === 2" />
+								<radio value="2" color="#FFCC33" style="transform: scale(0.7)"
+									:checked="chemicalId && chemical.type === 2" />
 								有机
 							</label>
 						</radio-group>
@@ -60,7 +74,8 @@
 						</view>
 						<checkbox-group v-if="chemicalId" @change="handleDangerLevelChange">
 							<label class="checkbox" v-for="(item, index) in dangerLevels" :key="index">
-								<checkbox v-if="chemical?.dangerLevel?.includes(+item.value)" :value="item.value" color="#FFCC33" style="transform: scale(0.7)" checked="true" />
+								<checkbox v-if="chemical?.dangerLevel?.includes(+item.value)" :value="item.value"
+									color="#FFCC33" style="transform: scale(0.7)" checked="true" />
 								<checkbox v-else :value="item.value" color="#FFCC33" style="transform: scale(0.7)" />
 								{{ item.label }}
 								<br />
@@ -75,28 +90,32 @@
 						</checkbox-group>
 					</view>
 					<view class="inputSection">
+						<view class="title ipt">
+							位置：
+						</view>
+						<input :placeholder="chemicalId ? chemical.site : '请输入位置'" maxlength="100" class="ipt tpyA"
+							v-model="form.site" placeholder-class="phc ipt" />
+					</view>
+					<view class="inputSection">
 						<view class="title ipt">备注：</view>
-						<textarea
-							:placeholder="chemicalId ? chemical.info : '请输入备注（非必填）'"
-							class="ipt tpyA"
-							auto-height="true"
-							v-model="form.info"
-							placeholder-class="phc ipt"
-						/>
+						<textarea :placeholder="chemicalId ? chemical.info : '请输入备注（非必填）'" class="ipt tpyA"
+							auto-height="true" v-model="form.info" placeholder-class="phc ipt" />
 					</view>
 					<view v-if="briefUserInfo && !chemicalId" class="inputSection">
 						<view class="title ipt">
 							<span style="color: red">*</span>
 							药品负责人：
 						</view>
-						<input :value="briefUserInfo.username" maxlength="100" class="ipt tpyA" placeholder-class="phc ipt" disabled="true" />
+						<input :value="briefUserInfo.username" maxlength="100" class="ipt tpyA"
+							placeholder-class="phc ipt" disabled="true" />
 					</view>
 					<view v-if="briefUserInfo && !chemicalId" class="inputSection">
 						<view class="title ipt">
 							<span style="color: red">*</span>
 							入库人：
 						</view>
-						<input :value="briefUserInfo.username" maxlength="100" class="ipt tpyA" placeholder-class="phc ipt" disabled="true" />
+						<input :value="briefUserInfo.username" maxlength="100" class="ipt tpyA"
+							placeholder-class="phc ipt" disabled="true" />
 					</view>
 				</view>
 				<button class="btn round" style="background-color: #f05b05" @click="submit">确定</button>
@@ -150,7 +169,10 @@ const form = ref({
 	dangerLevel: [],
 	info: "",
 	responsorId: null,
-	registerIds: []
+	registerIds: [],
+	specification: "",
+	purity: "",
+	site: ""
 });
 
 const dangerLevels = [
@@ -184,6 +206,19 @@ const submit = async () => {
 		icon: "loading",
 		duration: 100000
 	});
+
+	// 验证纯度字段
+	if (form.value.purity !== '' && form.value.purity !== null && form.value.purity !== undefined) {
+		const purityValue = parseFloat(form.value.purity);
+		if (isNaN(purityValue) || purityValue < 0 || purityValue > 1) {
+			uni.showToast({
+				title: "纯度必须为0-1之间的数字或留空",
+				icon: "none",
+				duration: 1500
+			});
+			return;
+		}
+	}
 
 	// 修改药品信息
 	if (chemicalId.value) {
